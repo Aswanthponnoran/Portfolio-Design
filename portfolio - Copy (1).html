@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aswanth CN — Full-Stack Python Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #090c09;
+    --bg-alt: #0d120d;
+    --surface: #11170f;
+    --surface-2: #151d13;
+    --border: #223121;
+    --border-bright: #2f4a2a;
+    --green: #39ff7a;
+    --green-dim: #4fae6f;
+    --green-deep: #1f7a45;
+    --text: #e8f2e6;
+    --text-dim: #8ba38c;
+    --text-faint: #56695a;
+    --red: #ff6b6b;
+    --yellow: #ffcc66;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  .bd1{
+    background:var(--bg);
+    color:#c9e6cf;
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  /* ::selection{background:var(--green);color:#04140a;} */
+
+  /* scanline / crt overlay */
+ 
+  
+
+  code, .mono{font-family:'JetBrains Mono',monospace;}
+
+  a{color:inherit;text-decoration:none;}
+
+  section{
+    position:relative;
+    min-height:10vh;
+    /* padding:120px 8vw 100px; */
+    max-width:1200px;
+    padding-top: -25px;
+    margin:0 auto;
+  }
+ 
+  #typed-role{color:var(--green-bright); font-weight:600;}
+  .blink-cursor{
+    display:inline-block; width:9px; height:1.1em; background:var(--green-bright);
+    animation:blink 1s steps(1) infinite; transform:translateY(2px);
+  }
+  @keyframes blink{50%{opacity:0;}}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
+
+ 
+
+  /* *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; } */
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background: var(--green-deep); color:#af1010; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  /* background grid texture */
+  .bg-grid{
+    position:fixed; inset:0; z-index:-2;
+    background-image:
+      linear-gradient(rgba(57,255,122,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,122,0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  }
+  .bg-glow{
+    position:fixed; top:-20%; left:50%; transform:translateX(-50%);
+    width:900px; height:900px; z-index:-1;
+    background: radial-gradient(circle, rgba(57,255,122,0.09) 0%, transparent 65%);
+    pointer-events:none;
+  }
+
+  /* scroll progress bar */
+  .progress-bar{
+    position:fixed; top:0; left:0; height:2px; width:0%;
+    background: linear-gradient(90deg, var(--green-deep), var(--green));
+    z-index:999; transition: width .1s linear;
+    box-shadow: 0 0 8px rgba(57,255,122,0.6);
+  }
+
+  /* nav */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 6vw;
+    background: rgba(9,12,9,0.75);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--border);
+    transition: padding .3s ease;
+  }
+  .logo{
+    font-family: var(--mono); font-weight:700; font-size:1.05rem;
+    color: var(--text); display:flex; align-items:center; gap:8px;
+  }
+  .logo .caret{ color: var(--green); }
+  .nav-links{ display:flex; gap:2.4rem; list-style:none; }
+  .nav-links a{
+    font-family: var(--mono); font-size:0.85rem; color: var(--text-dim);
+    position:relative; padding: 4px 0; transition: color .25s ease;
+  }
+  .nav-links a::before{ content:'./'; color: var(--text-faint); }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0%;
+    background: var(--green); transition: width .25s ease;
+  }
+  .nav-links a:hover{ color: var(--green); }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-cta{
+    font-family: var(--mono); font-size:0.8rem; padding:9px 18px;
+    border:1px solid var(--green-deep); border-radius:4px; color: var(--green);
+    transition: all .25s ease;
+  }
+  .nav-cta:hover{ background: var(--green); color:#04140a; box-shadow:0 0 20px rgba(57,255,122,0.4); }
+  .nav-toggle{ display:none; }
+
+  section{padding-top: -19px; max-width:1200px; margin:0 auto; position:relative; }
+
+  /* shell-style section eyebrow */
+  .shell-line{
+    font-family: var(--mono); font-size:0.85rem; color: var(--text-dim);
+    display:flex; align-items:center; gap:10px; margin-bottom:1.4rem;
+  }
+  .shell-line .prompt{ color: var(--green); }
+  .shell-line .path{ color: var(--green-dim); }
+  .section-title{
+    font-family: var(--mono); font-weight:700; font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    margin-bottom: 2.6rem; color: var(--text);
+  }
+  .section-title .dot{ color: var(--green); }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ opacity:0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal-stagger.visible > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.visible > *:nth-child(1){ transition-delay: .05s; }
+  .reveal-stagger.visible > *:nth-child(2){ transition-delay: .12s; }
+  .reveal-stagger.visible > *:nth-child(3){ transition-delay: .19s; }
+  .reveal-stagger.visible > *:nth-child(4){ transition-delay: .26s; }
+  .reveal-stagger.visible > *:nth-child(5){ transition-delay: .33s; }
+  .reveal-stagger.visible > *:nth-child(6){ transition-delay: .40s; }
+  .reveal-stagger.visible > *:nth-child(7){ transition-delay: .47s; }
+  .reveal-stagger.visible > *:nth-child(8){ transition-delay: .54s; }
+
+  /* HERO */
+  .hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding-top: 100px;
+  }
+  .hero-inner{ display:grid; grid-template-columns: 1.1fr 1fr; gap:4rem; align-items:center; }
+  .hero-eyebrow{
+    font-family: var(--mono); color: var(--green); font-size:0.85rem;
+    display:flex; align-items:center; gap:10px; margin-bottom:1.2rem;
+  }
+  .hero-eyebrow .blink{ width:8px; height:8px; border-radius:50%; background: var(--green); animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; box-shadow:0 0 0 0 rgba(57,255,122,.5);} 50%{ opacity:.5; } }
+
+  .hero h1{
+    font-family: var(--mono); font-weight:800; font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height:1.15; margin-bottom:1.2rem; color:var(--text);
+  }
+  .hero h1 .accent{ color: var(--green); }
+  .hero p.sub{
+    color: var(--text-dim); font-size:1.05rem; max-width:480px; margin-bottom:2.2rem;
+  }
+  .hero-cta{ display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--mono); font-size:0.9rem; padding:13px 26px; border-radius:5px;
+    display:inline-flex; align-items:center; gap:8px; transition: all .25s ease; cursor:pointer;
+    border:1px solid transparent;
+  }
+  .btn-primary{ background: var(--green); color:#04140a; font-weight:600; }
+  .btn-primary:hover{ box-shadow: 0 0 26px rgba(57,255,122,0.45); transform: translateY(-2px); }
+  .btn-ghost{ border-color: var(--border-bright); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--green); color: var(--green); }
+
+  /* terminal window */
+  .terminal{
+    background: var(--surface); border:1px solid var(--border-bright); border-radius:10px;
+    overflow:hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(57,255,122,0.03);
+  }
+  .terminal-head{
+    display:flex; align-items:center; gap:8px; padding:12px 16px;
+    background: var(--surface-2); border-bottom:1px solid var(--border);
+  }
+  .terminal-dot{ width:11px; height:11px; border-radius:50%; }
+  .terminal-dot.red{ background:#ff5f57; }
+  .terminal-dot.yellow{ background:#febc2e; }
+  .terminal-dot.green{ background:#28c840; }
+  .terminal-title{ margin-left:8px; font-family: var(--mono); font-size:0.75rem; color: var(--text-faint); }
+  .terminal-body{ padding: 22px 20px; font-family: var(--mono); font-size:0.85rem; min-height:260px; }
+  .terminal-body .line{ margin-bottom:10px; color: var(--text-dim); }
+  .terminal-body .prompt{ color: var(--green); }
+  .terminal-body .path{ color: var(--green-dim); }
+  .terminal-body .out{ color: var(--text); padding-left:0; }
+  .terminal-body .comment{ color: var(--text-faint); }
+  .typed-cursor{ display:inline-block; width:8px; height:1.1em; background: var(--green); vertical-align:middle; margin-left:2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ABOUT */
+  .about-grid{ display:grid; grid-template-columns: 0.9fr 1.1fr; gap:3.5rem; align-items:start; }
+  .about-text p{ color: var(--text-dim); margin-bottom:1.1rem; font-size:1.02rem; }
+  .about-text strong{ color: var(--text); font-weight:600; }
+  .stat-block{ display:grid; grid-template-columns: 1fr 1fr; gap:1.4rem; margin-top:2rem; }
+  .stat{
+    border:1px solid var(--border); background: var(--surface); border-radius:8px;
+    padding:1.2rem 1.3rem; transition: border-color .25s ease, transform .25s ease;
+  }
+  .stat:hover{ border-color: var(--green-deep); transform: translateY(-3px); }
+  .stat .num{ font-family: var(--mono); font-size:1.7rem; font-weight:700; color: var(--green); }
+  .stat .label{ font-size:0.82rem; color: var(--text-dim); margin-top:2px; }
+
+  .code-card{
+    background: var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.6rem;
+    font-family: var(--mono); font-size:0.82rem; color: var(--text-dim); overflow-x:auto;
+  }
+  .code-card .kw{ color:#ff8fb1; }
+  .code-card .fn{ color: var(--green); }
+  .code-card .str{ color: var(--yellow); }
+  .code-card .cm{ color: var(--text-faint); }
+  .code-card .cls{ color:#7fd7ff; }
+
+  /* SKILLS */
+  .skills-cols{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1.8rem; }
+  .skill-cat{ background: var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.6rem; transition: border-color .25s ease; }
+  .skill-cat:hover{ border-color: var(--border-bright); }
+  .skill-cat h3{
+    font-family: var(--mono); font-size:0.95rem; color: var(--green); margin-bottom:1.1rem;
+    display:flex; align-items:center; gap:8px;
+  }
+  .skill-cat h3::before{ content:'#'; color: var(--text-faint); }
+  .tag-list{ display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .tag{
+    font-family: var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:20px;
+    border:1px solid var(--border-bright); color: var(--text-dim);
+    transition: all .2s ease;
+  }
+  .tag:hover{ border-color: var(--green); color: var(--green); background: rgba(57,255,122,0.06); }
+
+  /* PROJECTS */
+  .project-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:1.8rem; }
+  .project-card{
+    background: var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:1.8rem; display:flex; flex-direction:column; gap:1rem;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    position:relative; overflow:hidden;
+  }
+  .project-card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    transform: scaleX(0); transition: transform .4s ease;
+  }
+  .project-card:hover{ transform: translateY(-6px); border-color: var(--border-bright); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.7); }
+  .project-card:hover::before{ transform: scaleX(1); }
+  .project-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .project-icon{
+    width:38px; height:38px; border-radius:8px; background: rgba(57,255,122,0.08);
+    display:flex; align-items:center; justify-content:center; color: var(--green); font-family: var(--mono); font-weight:700;
+  }
+  .project-links{ display:flex; gap:0.7rem; }
+  .project-links a{ color: var(--text-dim); font-size:0.8rem; font-family:var(--mono); border-bottom:1px dotted var(--text-faint); }
+  .project-links a:hover{ color: var(--green); border-color: var(--green); }
+  .project-card h3{ font-family: var(--mono); font-size:1.15rem; color: var(--text); }
+  .project-card p{ color: var(--text-dim); font-size:0.92rem; }
+  .project-tags{ display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:auto; }
+  .project-tags span{
+    font-size:0.72rem; font-family: var(--mono); color: var(--green-dim);
+    background: rgba(57,255,122,0.06); padding:3px 9px; border-radius:4px;
+  }
+
+  /* EXPERIENCE timeline as git log */
+  .timeline{ position:relative; padding-left:2.2rem; }
+  .timeline::before{
+    content:''; position:absolute; left:6px; top:6px; bottom:6px; width:2px;
+    background: linear-gradient(var(--green-deep), transparent);
+  }
+  .commit{ position:relative; padding-bottom:2.6rem; }
+  .commit:last-child{ padding-bottom:0; }
+  .commit::before{
+    content:''; position:absolute; left:-2.2rem; top:4px; width:12px; height:12px; border-radius:50%;
+    background: var(--bg); border:2px solid var(--green); box-shadow:0 0 0 3px rgba(57,255,122,0.08);
+  }
+  .commit-hash{ font-family: var(--mono); color: var(--green-dim); font-size:0.8rem; }
+  .commit-meta{ display:flex; gap:0.8rem; align-items:baseline; flex-wrap:wrap; margin-bottom:0.4rem; }
+  .commit-role{ font-family: var(--mono); font-weight:700; color: var(--text); font-size:1.05rem; }
+  .commit-date{ font-family: var(--mono); font-size:0.78rem; color: var(--text-faint); }
+  .commit-body{ color: var(--text-dim); font-size:0.94rem; max-width:640px; }
+  .commit-body ul{ margin-top:0.5rem; padding-left:1.1rem; }
+  .commit-body li{ margin-bottom:0.3rem; }
+
+  /* CONTACT */
+  .contact-wrap{ display:grid; grid-template-columns: 1fr 1fr; gap:3.5rem; align-items:center; }
+  .contact-info p{ color: var(--text-dim); margin-bottom:1.6rem; max-width:420px; }
+  .contact-channels{ display:flex; flex-direction:column; gap:0.9rem; }
+  .channel{ display:flex; align-items:center; gap:0.8rem; font-family: var(--mono); font-size:0.92rem; color: var(--text-dim); transition: color .2s ease; }
+  .channel:hover{ color: var(--green); }
+  .channel .icon{ color: var(--green); }
+
+  form.terminal-form{ background: var(--surface); border:1px solid var(--border-bright); border-radius:10px; padding:1.8rem; font-family: var(--mono); }
+  .form-row{ margin-bottom:1.1rem; }
+  .form-row label{ display:block; font-size:0.78rem; color: var(--green-dim); margin-bottom:6px; }
+  .form-row label::before{ content:'> '; color: var(--text-faint); }
+  .form-row input, .form-row textarea{
+    width:100%; background: var(--bg-alt); border:1px solid var(--border); border-radius:5px;
+    padding:11px 12px; color: var(--text); font-family: var(--mono); font-size:0.88rem; resize:vertical;
+  }
+  .form-row input:focus, .form-row textarea:focus{ outline:none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(57,255,122,0.08); }
+  .submit-btn{
+    width:100%; padding:13px; background: var(--green); color:#04140a; font-family: var(--mono);
+    font-weight:700; border:none; border-radius:5px; cursor:pointer; transition: all .25s ease;
+  }
+  .submit-btn:hover{ box-shadow:0 0 26px rgba(57,255,122,0.4); }
+
+  footer{
+    border-top:1px solid var(--border); padding: 2.4rem 6vw; text-align:center;
+    font-family: var(--mono); font-size:0.8rem; color: var(--text-faint);
+  }
+  footer .caret{ color: var(--green); }
+
+  @media (max-width: 880px){
+    .hero-inner, .about-grid, .contact-wrap{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
+    section{ padding: 110px 6vw 70px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="#home" class="logo"><span class="caret">&gt;_</span> Aswanth CN</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">connect()</a>
+</nav>
+<div>
+</div>
+<section class="hero" id="top">
+   <img src="D:/web and vibe/img.webp" style="max-height: 350px;max-width: 20%;margin-left: 38%;border-radius: 50%;border:5px solid #8d135a;">
+
+  
+</section>
+
+<section style="margin-top:-65px;min-height: 15px;padding-top:5px;margin-bottom: -106px;border: 1px solid rgb(1, 16, 4);" class="hero" id="top">
+   <div style="color: #6cec7f;" class="hero-cursor-row">
+    <span style="color: #28c840;" class="mono">&gt;</span>
+    <span id="typed-role"></span><span class="blink-cursor"></span>
+  </div>
+  
+</section>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="blink"></span> STATUS: OPEN TO WORK</div>
+      <h1>Building backends<br>that don't fall over<br>&amp; <span class="accent">UIs</span> people enjoy.</h1>
+      <p class="sub">I'm a full-stack developer who ships production Python — Django &amp; FastAPI on the server, React on the client, and enough DevOps to deploy it without panic.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">$ view projects</a>
+        <a href="#" class="btn btn-ghost">↓ download resume.pdf</a>
+      </div>
+    </div>
+    <div class="terminal reveal" id="heroTerminal">
+      <div class="terminal-head">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">zsh — ~/portfolio</span>
+      </div>
+      <div class="terminal-body" id="typedBody"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="shell-line reveal"><span class="prompt">$</span> <span class="path">~/about</span> whoami</div>
+  <h2 class="section-title">01<span class="dot">.</span> About Me</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a <strong>full-stack developer</strong> focused on Python — I like the kind of work where the API contract, the database schema, and the UI state all have to agree with each other, and where "it works on my machine" isn't good enough.</p>
+      <p>Comfortable owning a feature end to end: modeling the data, writing the endpoints, wiring up the frontend, and getting it behind a CI/CD pipeline that doesn't need babysitting.</p>
+      <p>Outside of shipping features, I spend time reading source code of the libraries I depend on daily, and slowly automating the boring parts of my own workflow.</p>
+      <div class="stat-block">
+        <div class="stat"><div class="num">4+</div><div class="label">years building software</div></div>
+        <div class="stat"><div class="num">30+</div><div class="label">projects shipped</div></div>
+        <div class="stat"><div class="num">99.9%</div><div class="label">uptime target</div></div>
+        <div class="stat"><div class="num">0</div><div class="label">tolerance for silent errors</div></div>
+      </div>
+    </div>
+    <div class="code-card reveal">
+<pre><span class="cm"># developer.py</span>
+<span class="kw">class</span> <span class="cls">Developer</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.name = <span class="str">"Your Name"</span>
+        self.role = <span class="str">"Full-Stack Python Developer"</span>
+        self.stack = [<span class="str">"Python"</span>, <span class="str">"Django"</span>,
+                      <span class="str">"FastAPI"</span>, <span class="str">"React"</span>,
+                      <span class="str">"PostgreSQL"</span>, <span class="str">"Docker"</span>]
+        self.currently_learning = <span class="str">"Rust"</span>
+
+    <span class="kw">def</span> <span class="fn">solve</span>(self, problem):
+        <span class="kw">return</span> self.stack + coffee(problem)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    me = <span class="cls">Developer</span>()
+    me.<span class="fn">solve</span>(<span class="str">"your next feature"</span>)</pre>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="shell-line reveal"><span class="prompt">$</span> <span class="path">~/skills</span> pip list --local</div>
+  <h2 class="section-title">02<span class="dot">.</span> Tech Stack</h2>
+  <div class="skills-cols reveal-stagger">
+    <div class="skill-cat">
+      <h3>backend</h3>
+      <div class="tag-list">
+        <span class="tag">Python</span><span class="tag">Django</span><span class="tag">FastAPI</span>
+        <span class="tag">Flask</span><span class="tag">REST APIs</span><span class="tag">GraphQL</span><span class="tag">Celery</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>frontend</h3>
+      <div class="tag-list">
+        <span class="tag">JavaScript</span><span class="tag">React</span><span class="tag">TypeScript</span>
+        <span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">Tailwind</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>data</h3>
+      <div class="tag-list">
+        <span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">MongoDB</span>
+        <span class="tag">Redis</span><span class="tag">SQLAlchemy</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>devops</h3>
+      <div class="tag-list">
+        <span class="tag">Docker</span><span class="tag">Git</span><span class="tag">CI/CD</span>
+        <span class="tag">AWS</span><span class="tag">Nginx</span><span class="tag">Linux</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="shell-line reveal"><span class="prompt">$</span> <span class="path">~/projects</span> ls -la</div>
+  <h2 class="section-title">03<span class="dot">.</span> Selected Projects</h2>
+  <div class="project-grid reveal-stagger">
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">01</div>
+        <div class="project-links"><a href="#">live</a><a href="#">code</a></div>
+      </div>
+      <h3>Inventory &amp; Order Platform</h3>
+      <p>A Django + React system for tracking stock across warehouses in real time, with role-based dashboards and automated low-stock alerts.</p>
+      <div class="project-tags"><span>Django</span><span>PostgreSQL</span><span>React</span><span>Celery</span></div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">02</div>
+        <div class="project-links"><a href="#">live</a><a href="#">code</a></div>
+      </div>
+      <h3>Realtime Analytics API</h3>
+      <p>FastAPI service ingesting event streams and serving aggregated metrics over WebSockets to a live dashboard, built for sub-second updates.</p>
+      <div class="project-tags"><span>FastAPI</span><span>Redis</span><span>WebSockets</span><span>Docker</span></div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">03</div>
+        <div class="project-links"><a href="#">live</a><a href="#">code</a></div>
+      </div>
+      <h3>Job Board SaaS</h3>
+      <p>Multi-tenant job board with Stripe billing, resume parsing, and a recommendation engine matching candidates to listings.</p>
+      <div class="project-tags"><span>Django</span><span>Stripe</span><span>scikit-learn</span><span>AWS S3</span></div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-icon">04</div>
+        <div class="project-links"><a href="#">live</a><a href="#">code</a></div>
+      </div>
+      <h3>DevOps Pipeline Toolkit</h3>
+      <p>A set of reusable GitHub Actions and Dockerfiles that cut deployment time for internal teams from ~40 minutes to under 6.</p>
+      <div class="project-tags"><span>Docker</span><span>GitHub Actions</span><span>Nginx</span><span>Bash</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="shell-line reveal"><span class="prompt">$</span> <span class="path">~/career</span> git log --oneline --graph</div>
+  <h2 class="section-title">04<span class="dot">.</span> Experience</h2>
+  <div class="timeline reveal-stagger">
+
+    <div class="commit">
+      <div class="commit-hash">commit a3f9c21</div>
+      <div class="commit-meta">
+        <span class="commit-role">Full-Stack Developer — Company Name</span>
+        <span class="commit-date">2024 — Present</span>
+      </div>
+      <div class="commit-body">
+        <ul>
+          <li>Own the backend for a customer-facing product serving thousands of daily active users.</li>
+          <li>Migrated a monolith to a service-oriented architecture, cutting average response time by 40%.</li>
+          <li>Mentor two junior developers on API design and testing practices.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="commit">
+      <div class="commit-hash">commit 7d21be4</div>
+      <div class="commit-meta">
+        <span class="commit-role">Backend Developer — Previous Company</span>
+        <span class="commit-date">2022 — 2024</span>
+      </div>
+      <div class="commit-body">
+        <ul>
+          <li>Built and maintained REST APIs powering the company's core mobile and web apps.</li>
+          <li>Introduced automated testing, raising coverage from 20% to 85%.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="commit">
+      <div class="commit-hash">commit 1a08f90</div>
+      <div class="commit-meta">
+        <span class="commit-role">Junior Developer — First Company</span>
+        <span class="commit-date">2020 — 2022</span>
+      </div>
+      <div class="commit-body">
+        <ul>
+          <li>Started as an intern, shipped my first production feature within the first month.</li>
+          <li>Learned the fundamentals of Django, SQL, and working inside a real codebase.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="shell-line reveal"><span class="prompt">$</span> <span class="path">~/contact</span> ./send_message.sh</div>
+  <h2 class="section-title">05<span class="dot">.</span> Let's Talk</h2>
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <p>Have a role, project, or idea in mind? My terminal — and inbox — are always open. I usually reply within a day.</p>
+      <div class="contact-channels">
+        <a class="channel" href="mailto:your.email@example.com"><span class="icon">@</span> your.email@example.com</a>
+        <a class="channel" href="#"><span class="icon">↗</span> github.com/yourusername</a>
+        <a class="channel" href="#"><span class="icon">↗</span> linkedin.com/in/yourusername</a>
+        <a class="channel" href="#"><span class="icon">↗</span> twitter.com/yourusername</a>
+      </div>
+    </div>
+    <form class="terminal-form reveal" onsubmit="return handleSubmit(event)">
+      <div class="form-row">
+        <label>name</label>
+        <input type="text" required placeholder="Jane Doe">
+      </div>
+      <div class="form-row">
+        <label>email</label>
+        <input type="email" required placeholder="jane@example.com">
+      </div>
+      <div class="form-row">
+        <label>message</label>
+        <textarea rows="4" required placeholder="Tell me about the project..."></textarea>
+      </div>
+      <button class="submit-btn" type="submit">$ send --message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span class="caret">&gt;_</span> Connect With Us · © 2026 Your Name · all systems operational
+</footer>
+
+
+
+
+<script>
+  // scroll progress bar
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrollTop / docHeight) * 100;
+    progressBar.style.width = pct + '%';
+  });
+
+  // scroll reveal via IntersectionObserver
+  const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => io.observe(el));
+
+  // smooth anchor scroll with nav offset
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e){
+      const targetId = this.getAttribute('href');
+      const targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        const offset = 80;
+        const top = targetEl.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // typed terminal effect in hero
+  const typedBody = document.getElementById('typedBody');
+  const script = [
+    { type: 'cmd', text: 'whoami' },
+    { type: 'out', text: 'your_name — full-stack developer' },
+    { type: 'cmd', text: 'python manage.py runserver' },
+    { type: 'out', text: 'Watching for file changes with StatReloader' },
+    { type: 'out', text: 'Django version 5.0, using settings \'core.settings\'' },
+    { type: 'out', text: 'Starting development server at http://127.0.0.1:8000/' },
+    { type: 'cmd', text: 'echo $STATUS' },
+    { type: 'out', text: 'ready_to_build', highlight: true }
+  ];
+
+  function typeLine(container, prefix, text, done){
+    let i = 0;
+    const lineEl = document.createElement('div');
+    lineEl.className = 'line';
+    lineEl.innerHTML = prefix;
+    container.appendChild(lineEl);
+    const cursor = document.createElement('span');
+    cursor.className = 'typed-cursor';
+    lineEl.appendChild(cursor);
+
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        cursor.insertAdjacentText('beforebegin', text[i]);
+        i++;
+      } else {
+        clearInterval(interval);
+        cursor.remove();
+        done();
+      }
+    }, 32);
+  }
+
+  function runScript(index){
+    if (index >= script.length) {
+      // loop with a blinking idle cursor
+      const idle = document.createElement('div');
+      idle.className = 'line';
+      idle.innerHTML = '<span class="prompt">$</span> <span class="typed-cursor"></span>';
+      typedBody.appendChild(idle);
+      return;
+    }
+    const item = script[index];
+    if (item.type === 'cmd') {
+      typeLine(typedBody, '<span class="prompt">$</span> ', item.text, () => {
+        setTimeout(() => runScript(index + 1), 260);
+      });
+    } else {
+      const el = document.createElement('div');
+      el.className = 'line out';
+      el.style.color = item.highlight ? 'var(--green)' : 'var(--text)';
+      el.style.paddingLeft = '0';
+      el.textContent = item.text;
+      typedBody.appendChild(el);
+      setTimeout(() => runScript(index + 1), item.highlight ? 500 : 220);
+    }
+  }
+
+  // start typing once hero terminal is in view
+  const heroObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runScript(0);
+        heroObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  heroObserver.observe(document.getElementById('heroTerminal'));
+
+  function handleSubmit(e){
+    e.preventDefault();
+    const btn = e.target.querySelector('.submit-btn');
+    const original = btn.textContent;
+    btn.textContent = '$ message sent ✓';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = original; }, 2600);
+    e.target.reset();
+    return false;
+  }
+
+// typing effect for hero role
+  const roles = ["UIUX developer.", "Full-Stack Developer.", "Backend Developer.", "Problem Solver."];
+  const el = document.getElementById('typed-role');
+  let ri = 0, ci = 0, deleting = false;
+
+  function typeLoop(){
+    const word = roles[ri];
+    if(!deleting){
+      ci++;
+      el.textContent = word.slice(0, ci);
+      if(ci === word.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+    } else {
+      ci--;
+      el.textContent = word.slice(0, ci);
+      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
+    }
+    setTimeout(typeLoop, deleting ? 45 : 85);
+  }
+  typeLoop();
+</script>
+
+</body>
+</html>

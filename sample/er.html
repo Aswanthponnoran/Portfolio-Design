@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canopy — web development studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A1512;
+    --panel: rgba(15,28,22,0.7);
+    --text: #EAF2EC;
+    --muted: #8CA097;
+    --line: rgba(234,242,236,0.12);
+
+    --lvl0: rgba(234,242,236,0.045);
+    --lvl1: #123321;
+    --lvl2: #1E5C39;
+    --lvl3: #33974F;
+    --lvl4: #7CF29B;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  .wrap{ max-width:1320px; margin:0 auto; padding:0 44px; position:relative; z-index:3; }
+
+  /* NAV */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 0;
+  }
+  .logo{
+    font-family:'Fraunces', serif; font-weight:600; font-size:21px; letter-spacing:-0.01em;
+    display:flex; align-items:center; gap:9px;
+  }
+  .logo .mark{
+    width:9px; height:9px; border-radius:2px; background:var(--lvl4);
+    box-shadow:0 0 10px rgba(124,242,155,0.7);
+  }
+  .nav-links{ display:flex; align-items:center; gap:34px; }
+  .nav-links a{
+    color:var(--muted); text-decoration:none; font-size:14px; font-weight:500;
+    transition: color .2s ease;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:500;
+    color:#08130D; background:var(--lvl4);
+    padding:10px 18px; border-radius:6px; text-decoration:none;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .nav-cta:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(124,242,155,0.25); }
+  @media (max-width:760px){ .nav-links a:not(.nav-cta){ display:none; } }
+
+  /* GRID BACKGROUND */
+  .grid-stage{
+    position:absolute; inset:0; z-index:0; overflow:hidden;
+  }
+  .grid-bg{
+    position:absolute; inset:-10px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(15px, 1fr));
+    grid-auto-rows: 15px;
+    gap:4px;
+  }
+  .cell{
+    background: var(--lvl0);
+    border-radius:2px;
+    opacity:0;
+    transform:scale(.4);
+    transition: background-color .7s ease, box-shadow .7s ease;
+    animation: appear .5s ease forwards;
+  }
+  .cell.l1{ background:var(--lvl1); }
+  .cell.l2{ background:var(--lvl2); }
+  .cell.l3{ background:var(--lvl3); }
+  .cell.l4{ background:var(--lvl4); box-shadow:0 0 8px rgba(124,242,155,0.55); }
+  @keyframes appear{ to{ opacity:1; transform:scale(1); } }
+
+  .scrim{
+    position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(105deg, var(--bg) 8%, rgba(10,21,18,0.92) 34%, rgba(10,21,18,0.55) 58%, rgba(10,21,18,0.12) 82%),
+      linear-gradient(to top, var(--bg) 0%, transparent 16%),
+      linear-gradient(to bottom, var(--bg) 0%, transparent 14%);
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;
+    min-height: 82vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 30px 0 90px;
+  }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:0.09em; color:var(--lvl4);
+    margin-bottom:22px;
+    opacity:0; animation: rise .7s ease forwards;
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--lvl4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+    line-height:1.06;
+    letter-spacing:-0.01em;
+    max-width:680px;
+    margin-bottom:26px;
+  }
+  h1 .row{ overflow:hidden; display:block; }
+  h1 .row span{ display:block; opacity:0; transform:translateY(105%); animation: slideUp .8s cubic-bezier(.22,1,.36,1) forwards; }
+  h1 .row:nth-child(1) span{ animation-delay:.15s; }
+  h1 .row:nth-child(2) span{ animation-delay:.28s; }
+  h1 em{ font-style:italic; color:var(--lvl4); font-weight:500; }
+
+  .sub{
+    font-size:16.5px; line-height:1.7; color:var(--muted);
+    max-width:460px; margin-bottom:36px;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.5s;
+  }
+
+  .cta-row{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.62s;
+  }
+  .btn-primary{
+    font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:14.5px;
+    background:var(--lvl4); color:#08130D;
+    padding:14px 24px; border-radius:8px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:9px;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(124,242,155,0.25); }
+  .btn-primary svg{ transition: transform .2s ease; }
+  .btn-primary:hover svg{ transform: translateX(3px); }
+
+  .btn-ghost{
+    font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:14.5px;
+    color:var(--text); text-decoration:none;
+    padding:14px 4px; border-bottom:1px solid var(--line);
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .btn-ghost:hover{ border-color:var(--lvl4); color:var(--lvl4); }
+
+  /* HUD */
+  .hud{
+    position:absolute; right:0; bottom:70px; z-index:2;
+    width:250px;
+    background: var(--panel);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    opacity:0; animation: rise .8s ease forwards; animation-delay:.8s;
+  }
+  .hud-top{
+    display:flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.07em;
+    color:var(--muted); margin-bottom:16px;
+  }
+  .hud-top .live{
+    width:6px; height:6px; border-radius:50%; background:var(--lvl4);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  .hud-num{
+    font-family:'Fraunces', serif; font-size:34px; font-weight:600; color:var(--text);
+    line-height:1;
+  }
+  .hud-num-label{ font-size:12px; color:var(--muted); margin-top:4px; margin-bottom:16px; }
+  .hud-divider{ height:1px; background:var(--line); margin-bottom:14px; }
+  .hud-row{ display:flex; justify-content:space-between; align-items:center; font-size:12.5px; }
+  .hud-row + .hud-row{ margin-top:8px; }
+  .hud-row span:first-child{ color:var(--muted); }
+  .hud-row span:last-child{ font-family:'IBM Plex Mono', monospace; color:var(--lvl4); }
+
+  @media (max-width:980px){
+    .hud{ position:static; width:100%; margin-top:34px; animation-delay:.75s; }
+    .scrim{ background: linear-gradient(180deg, rgba(10,21,18,0.75), rgba(10,21,18,0.94) 40%, var(--bg) 85%); }
+  }
+
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0);} }
+  @keyframes slideUp{ to{ opacity:1; transform:translateY(0);} }
+  @keyframes pulse{
+    0%,100%{ opacity:1; box-shadow:0 0 0 0 rgba(124,242,155,0.5); }
+    50%{ opacity:.55; box-shadow:0 0 0 5px rgba(124,242,155,0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+
+  :focus-visible{ outline:2px solid var(--lvl4); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+  <div class="grid-stage">
+    <div class="grid-bg" id="gridBg"></div>
+    <div class="scrim"></div>
+  </div>
+
+  <div class="wrap">
+    <nav>
+      <div class="logo"><span class="mark"></span>Canopy</div>
+      <div class="nav-links">
+        <a href="#">Work</a>
+        <a href="#">Process</a>
+        <a href="#">Studio</a>
+        <a href="#" class="nav-cta">Start a project</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> ALWAYS SHIPPING</div>
+
+      <h1>
+        <span class="row"><span>Code that keeps</span></span>
+        <span class="row"><span>the lights <em>green.</em></span></span>
+      </h1>
+
+      <p class="sub">A web development studio that ships in small, steady commits — the kind that keep sites fast, stable, and online. No big-bang launches, no surprises.</p>
+
+      <div class="cta-row">
+        <a href="#" class="btn-primary">
+          Start a project
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-ghost">See the work →</a>
+      </div>
+
+      <div class="hud">
+        <div class="hud-top"><span class="live"></span> SHIPPING STATUS</div>
+        <div class="hud-num" id="commitCount">0</div>
+        <div class="hud-num-label">commits this week</div>
+        <div class="hud-divider"></div>
+        <div class="hud-row"><span>Uptime</span><span>99.98%</span></div>
+        <div class="hud-row"><span>Avg. deploy</span><span>3m 40s</span></div>
+        <div class="hud-row"><span>Status</span><span>ALL GREEN</span></div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const gridBg = document.getElementById('gridBg');
+  const levels = ['', 'l1', 'l1', 'l2', 'l2', 'l3', 'l4']; // weighted toward lower levels
+
+  function buildGrid(){
+    gridBg.innerHTML = '';
+    const cellSize = 19; // 15px + 4px gap
+    const cols = Math.ceil(window.innerWidth / cellSize) + 2;
+    const rows = Math.ceil(window.innerHeight / cellSize) + 2;
+    const total = cols * rows;
+    const frag = document.createDocumentFragment();
+
+    for(let i=0; i<total; i++){
+      const cell = document.createElement('div');
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const level = levels[Math.floor(Math.random()*levels.length)];
+      if(level) cell.classList.add(level);
+      cell.classList.add('cell');
+      const delay = (col + row) * 4 + Math.random()*200;
+      cell.style.animationDelay = reduceMotion ? '0ms' : delay + 'ms';
+      frag.appendChild(cell);
+    }
+    gridBg.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    gridBg.appendChild(frag);
+    return gridBg.querySelectorAll('.cell');
+  }
+
+  let cells = buildGrid();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { cells = buildGrid(); }, 300);
+  });
+
+  // ambient "live commit" flicker
+  if(!reduceMotion){
+    setInterval(() => {
+      for(let i=0; i<3; i++){
+        const cell = cells[Math.floor(Math.random()*cells.length)];
+        if(!cell) continue;
+        cell.classList.remove('l1','l2','l3','l4');
+        const lvl = levels[Math.floor(Math.random()*levels.length)];
+        if(lvl) cell.classList.add(lvl);
+      }
+    }, 220);
+  }
+
+  // HUD counter tick-up
+  const counterEl = document.getElementById('commitCount');
+  const target = 214;
+  if(reduceMotion){
+    counterEl.textContent = target;
+  } else {
+    let current = 0;
+    const start = performance.now();
+    const duration = 1800;
+    function tick(now){
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1-p, 3);
+      current = Math.round(eased * target);
+      counterEl.textContent = current;
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    setTimeout(() => requestAnimationFrame(tick), 900);
+  }
+</script>
+
+</body>
+</html>
